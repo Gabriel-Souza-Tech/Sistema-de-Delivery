@@ -1,19 +1,26 @@
 package org.example.models;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
     private double taxaEntrega;
+    private LocalDate dataPedido;
     private Cliente cliente;
     private ArrayList<Item> itens;
     private ArrayList<CupomDescontoEntrega> cupomDescontos;
 
-    public Pedido(double taxaEntrega, Cliente cliente) {
+    public Pedido(double taxaEntrega, LocalDate dataPedido, Cliente cliente) {
+        if (taxaEntrega <= 0 || dataPedido == null || cliente == null) {
+            throw new IllegalArgumentException("Valores inválidos para criar o pedido.");
+        }
+
         this.taxaEntrega = taxaEntrega;
+        this.dataPedido = dataPedido;
         this.cliente = cliente;
         this.itens = new ArrayList<>();
-        this.cupomDescontos = new ArrayList<>();
+        this.cupomDescontos = new ArrayList<CupomDescontoEntrega>();
     }
 
     public double getValorPedido() {
@@ -23,7 +30,7 @@ public class Pedido {
         }
 
         // falta adicionar logica dos descontos, adicionado return so para retirar o erro da IDE
-        return valorDoPedido;
+        return valorDoPedido + taxaEntrega;
     }
 
     public Cliente getCliente() {
@@ -43,13 +50,13 @@ public class Pedido {
     }
 
     public double getDescontoConcedido()    {
-        double descontoConcedido = 0;
+        double descontoTotal = 0;
 
         for(CupomDescontoEntrega desconto : cupomDescontos) {
-            descontoConcedido += desconto.getValorDesconto();
+            descontoTotal += desconto.getValorDesconto();
         }
 
-        return descontoConcedido;
+        return descontoTotal;
     }
 
     public List<CupomDescontoEntrega> getCupomDescontos() {

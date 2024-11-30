@@ -15,3 +15,5 @@ public class CalculadoraDescontoService {
 
     public void calcularDesconto(Pedido pedido) {}
 }
+
+// preciso adicionar a lista de metodos de desconto
