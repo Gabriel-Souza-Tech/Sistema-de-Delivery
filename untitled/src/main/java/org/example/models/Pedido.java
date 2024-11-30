@@ -42,7 +42,7 @@ public class Pedido {
         cupomDescontos.add(desconto);
     }
 
-    public double getDescontoCondedido()    {
+    public double getDescontoConcedido()    {
         double descontoConcedido = 0;
 
         for(CupomDescontoEntrega desconto : cupomDescontos) {

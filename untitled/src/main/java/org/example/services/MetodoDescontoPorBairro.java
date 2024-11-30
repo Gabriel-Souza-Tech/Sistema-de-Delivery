@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.interfaces.IMetodoDescontoTaxaEntrega;
+import org.example.models.CupomDescontoEntrega;
 import org.example.models.Pedido;
 
 import java.util.Map;
@@ -15,15 +16,22 @@ public class MetodoDescontoPorBairro implements IMetodoDescontoTaxaEntrega {
 
     // implementando logica de calcular desconto com a validação do seAplica()
     @Override
-    public void calcularDesconto(Pedido pedido)   {
-        if(seAplica(pedido)) {
+    public void calcularDesconto(Pedido pedido) {
+        if(!seAplica(pedido)) {
+            throw new  IllegalArgumentException("O desconto por bairro nao pode ser apicado ao pedido.");
+        }
 
-        } else {
-            throw new RuntimeException("");
+        String bairroCliente = pedido.getCliente().getNome();
+        Double percentualDesconto = bairrosComtemplados.get(bairroCliente);
+
+        if(percentualDesconto != null) {
+            double valorDesconto = pedido.getTaxaEntrega() * percentualDesconto;
+            pedido.aplicarDescontos(new CupomDescontoEntrega("Desconto pelo Bairro", valorDesconto));
         }
     }
+
     @Override
     public boolean seAplica(Pedido pedido) {
-        return bairrosComtemplados.containsValue(pedido.getCliente().getBairro()) && pedido.getDescontoCondedido() <= 10.0;
+        return bairrosComtemplados.containsKey(pedido.getCliente().getBairro()) && pedido.getDescontoConcedido() <= 10.0;
     }
 }
