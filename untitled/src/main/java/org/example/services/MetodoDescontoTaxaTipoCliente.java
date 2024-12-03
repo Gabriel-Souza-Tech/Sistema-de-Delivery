@@ -11,6 +11,7 @@ public class MetodoDescontoTaxaTipoCliente implements IMetodoDescontoTaxaEntrega
             "Ouro", 0.3,
             "Prata", 0.2,
             "Bronze", 0.1
+
     );
 
 
@@ -23,8 +24,8 @@ public class MetodoDescontoTaxaTipoCliente implements IMetodoDescontoTaxaEntrega
             String tipoCliente = pedido.getCliente().getTipo();
             Double percentualDesconto = categoriaCliente.get(tipoCliente);
 
-            if (percentualDesconto != null) {
-                Double valorDesconto = pedido.getTaxaEntrega() * percentualDesconto;
+            if (percentualDesconto != 0.0) {
+                double valorDesconto = pedido.getTaxaEntrega() * percentualDesconto;
                 pedido.aplicarDescontos(new CupomDescontoEntrega("Desconto por tipo de Cliente", valorDesconto));
 
             }

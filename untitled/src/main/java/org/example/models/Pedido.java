@@ -8,6 +8,7 @@ public class Pedido {
     private double taxaEntrega;
     private LocalDate dataPedido;
     private Cliente cliente;
+    private String codigoCupom;
     private ArrayList<Item> itens;
     private ArrayList<CupomDescontoEntrega> cupomDescontos;
 
@@ -23,14 +24,23 @@ public class Pedido {
         this.cupomDescontos = new ArrayList<CupomDescontoEntrega>();
     }
 
+    public void adicionarItem(Item item) {
+        this.itens.add(item);
+    }
+
     public double getValorPedido() {
         double valorDoPedido = 0;
+        double descontoTotal = 0;
+
         for (Item item : itens) {
             valorDoPedido += item.getValorTotal();
         }
 
-        // falta adicionar logica dos descontos, adicionado return so para retirar o erro da IDE
-        return valorDoPedido + taxaEntrega;
+        for(CupomDescontoEntrega cupom : this.cupomDescontos)  {
+            descontoTotal += cupom.getValorDesconto();
+        }
+
+        return valorDoPedido + getTaxaEntrega() - descontoTotal;
     }
 
     public Cliente getCliente() {
@@ -45,10 +55,6 @@ public class Pedido {
         return taxaEntrega;
     }
 
-    public void aplicarDescontos(CupomDescontoEntrega desconto) {
-        cupomDescontos.add(desconto);
-    }
-
     public double getDescontoConcedido()    {
         double descontoTotal = 0;
 
@@ -59,7 +65,34 @@ public class Pedido {
         return descontoTotal;
     }
 
+    public String getCodigoCupom() {
+        return codigoCupom;
+    }
+
+    public void aplicarDescontos(CupomDescontoEntrega desconto) {
+        cupomDescontos.add(desconto);
+    }
+
     public List<CupomDescontoEntrega> getCupomDescontos() {
         return cupomDescontos;
     }
+
+    @Override
+    public String toString() {
+        String itensInfo = "";
+        for (Item item : itens) {
+            itensInfo += item.toString() + " | ";
+        }
+
+        return String.format(
+                "Cliente: %s, Data do Pedido: %s, Taxa de Entrega: %.2f, Itens: [%s], Cupons de Desconto: %d, Valor Total: %.2f",
+                cliente.getNome(),
+                dataPedido,
+                taxaEntrega,
+                itensInfo.isEmpty() ? "Nenhum item" : itensInfo,
+                cupomDescontos.size(),
+                getValorPedido()
+        );
+    }
+
 }

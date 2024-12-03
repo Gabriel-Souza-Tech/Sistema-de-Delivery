@@ -13,7 +13,33 @@ public class CalculadoraDescontoService {
         this.metodosDesconto = new ArrayList<IMetodoDescontoTaxaEntrega>();
     }
 
-    public void calcularDesconto(Pedido pedido) {}
-}
+    public void calcularTaxaDesconto(Pedido pedido) {
+        for(IMetodoDescontoTaxaEntrega metodo : metodosDesconto)    {
+            metodo.calcularDesconto(pedido);
+        }
+    }
 
-// preciso adicionar a lista de metodos de desconto
+    private static List<IMetodoDescontoTaxaEntrega> getListMetodoDesconto() {
+        List<IMetodoDescontoTaxaEntrega> metodosDeDesconto= new ArrayList<>();
+
+        IMetodoDescontoTaxaEntrega metodoDescontoBairro = new MetodoDescontoPorBairro();
+        IMetodoDescontoTaxaEntrega metodoDescontoTipoCliente = new MetodoDescontoTaxaTipoCliente();
+        IMetodoDescontoTaxaEntrega metodoDescontoTipoItem = new MetodoDescontoTipoItem();
+        IMetodoDescontoTaxaEntrega metodoDescontoValorPedido = new MetodoDescontoValorPedido();
+
+        metodosDeDesconto.add(metodoDescontoBairro);
+        metodosDeDesconto.add(metodoDescontoTipoCliente);
+        metodosDeDesconto.add(metodoDescontoTipoItem);
+        metodosDeDesconto.add(metodoDescontoValorPedido);
+
+        return metodosDeDesconto;
+    }
+
+    public void adicionarMetodo(IMetodoDescontoTaxaEntrega metodoDesconto) {
+        if (metodoDesconto == null) {
+            return;
+        }
+
+        this.metodosDesconto.add(metodoDesconto);
+    }
+}

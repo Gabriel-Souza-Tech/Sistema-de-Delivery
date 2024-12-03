@@ -8,10 +8,9 @@ public class Cliente {
     private String Bairro;
     private String Cidade;
 
-    public Cliente(String nome, String tipo, double fidelidade, String logradouro, String Bairro, String Cidade) {
+    public Cliente(String nome, String tipo, String logradouro, String Bairro, String Cidade) {
         this.nome = nome;
         this.tipo = tipo;
-        this.fidelidade = fidelidade;
         this.logradouro = logradouro;
         this.Bairro = Bairro;
         this.Cidade = Cidade;
